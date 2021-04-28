@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Weather</title>
+    <link rel="icon" href="/img/icon.png">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <div class="main-content">
+        {{>header}}
+        <p>Use this site to get your weather</p>
+        <form>
+            <input type="text" placeholder="Location">
+            <button>Search</button>
+        </form>
+        <p id="message-1"></p>
+        <p id="message-2"></p>
+    </div>
+    {{>footer}}
+    <script>
+        const weatherForm = document.querySelector('form')
+        const search = document.querySelector('input')
+        const messageone = document.querySelector('#message-1')
+        const messagetwo = document.querySelector('#message-2')
+        weatherForm.addEventListener('submit', (e) => {
+            e.preventDefault()
+            const location = search.value
+            messageone.textContent = 'Loading..'
+            messagetwo.textContent = ''
+            fetch(`http://localhost:3000/weather?address=${location}`).then((response) => {
+                response.json().then((data) => {
+                    if (data.error) {
+                        messageone.textContent = data.error
+                    }
+                    else {
+                        messageone.textContent = data.location
+                        messagetwo.textContent = data.forecast
+                    }
+                })
+            })
+        })
+
+    </script>
+</body>
+
+</html>
